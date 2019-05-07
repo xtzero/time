@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>xtTime</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style type="text/css">
+		*{
+			margin: 0 !important;
+			font-family: "microsoft yahei"
+		}
+		
+		.container{
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100vh;
+			background-color: #000000;
+			background-position: center;
+			background-size: cover;
+		}
+		
+		.cover{
+			position: fixed;
+			width: 100%;
+			height: 100vh;
+			left: 0;
+			top: 0;
+			background-color: rgba(0,0,0,0.3);
+			z-index: 100000;
+			color: white;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			/* font-size: 100px; */
+		}
+		
+		.setting-btn{
+			z-index: 100001;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			width: 44px;
+			height: 44px;
+			border: solid 2px white;
+			border-radius: 50%;
+			font-size: 20px;
+			line-height: 44px;
+			color: white;
+			font-weight: 900;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(0,0,0,0.5);
+		}
+		
+		.setting-btn:hover,.setting-btn:active{
+			cursor: pointer;
+			background-color: rgb(255,255,255);
+		}
+		
+		.setting-columns{
+			z-index: 100001;
+			position: absolute;
+			top: 10px;
+			right: 0px;
+			width: 100px;
+			min-height: 44px;
+			border: solid 2px white;
+			flex-direction: column;
+			display: none;
+		}
+		
+		.settint-columns-item{
+			width: 100%;
+			height: 44px;
+			color: white;
+			background-color: rgba(0,0,0,0.5);
+			border: solid 1px white;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.settint-columns-item:active,.settint-columns-item:hover{
+			cursor: pointer;
+			background-color: rgba(0,0,0,1);
+			color: #ff9800;
+		}
+		
+		.todo{
+			z-index: 100002;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(0,0,0,0.9);
+			display: none;
+			flex-direction: column;
+			padding-top: 10vw;
+			justify-content: flex-start;
+			align-items: center;
+		}
+		
+		.closeTodo{
+			position: absolute;
+			top: 5vw;
+			left: 5vw;
+			color: white;
+		}
+		
+		.closeTodo:hover{
+			color: #ff9800;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.closeTodo:active{
+			color: white;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.clearTodo{
+			position: absolute;
+			top: 5vw;
+			left: 10vw;
+			color: white;
+		}
+		
+		.clearTodo:hover{
+			color: #ff9800;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.clearTodo:active{
+			color: white;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.addTodoBtn{
+			position: absolute;
+			top: 5vw;
+			right: 5vw;
+			color: white;
+		}
+		
+		.addTodoBtn:hover{
+			color: #ff9800;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.addTodoBtn:active{
+			color: white;
+			font-size: 2em;
+			cursor: pointer;
+		}
+		
+		.todo>div{
+			color: white;
+			font-size: 25px;
+		}
+		
+		.todo-item:hover{
+			cursor: pointer;
+		}
+		
+		.todo-item:hover:after{
+			content: "(点击以完成)";
+		}
+		
+		.todo-item-finished{
+			color: gray !important;
+		}
+		
+		.addTodo{
+			position: absolute;
+			top: 7vw;
+			right: 5vw;
+			display: flex;
+			flex-direction: column;
+			border: solid 1px white;
+			padding: 30px 10px;
+			background-color: black;
+		}
+		
+		.addTodo>input{
+			border-style: none;
+			background-color: rgba(0,0,0,0);
+			color: white;
+			margin: 10px 0 !important;
+			border-bottom: solid 1px white;
+		}
+		
+		.closeAddTodo{
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			color: white;
+		}
+		
+		.closeAddTodo:hover{
+			color: #ff9800;
+			cursor: pointer;
+		}
+		
+		.closeAddTodo:active{
+			color: white;
+			font-size: 1.2em;
+			cursor: pointer;
+		}
+		
+		.addTodoCfmBtn{
+			font-size: 10px;
+			width: 100;
+			text-align: center;
+			margin-top: 10px !important;
+			margin-bottom: -10px !important;
+		}
+		
+		.addTodoCfmBtn:active,.addTodoCfmBtn:hover{
+			cursor: pointer;
+			color: #FF9800;
+		}
+		
+		.recentlyTodo{
+			font-size: 17px;
+			margin-top: 20px !important;
+		}
+		
+		.viewMoreTodo{
+			margin: 0 5px;
+			color: aliceblue;
+		}
+		
+		.viewMoreTodo:hover{
+			cursor: pointer;
+			text-decoration: underline;
+			font-weight: 900;
+		}
+	</style>
+</head>
+<body>
+	<div class="container" id="bgimage" style="background-image: url(images/1.jpeg);"></div>
+	<div class="cover" id="cover">
+		<div class="date" id="date"></div>
+		<div class="time" id="time"></div>
+		<div class="recentlyTodo" id="recentlyTodo">最近待办：<span class="viewMoreTodo" onclick="displayTodo();">查看全部3个</span> </div>
+	</div>
+	<div class="setting-btn" id="menuCircle" onclick="showMenu();"></div>
+	<div class="setting-columns" id="menu">
+		<div class="settint-columns-item" onclick="hideMenu();">收起</div>
+		<div id="displaySecond" class="settint-columns-item" onclick="displaySecondSwitch();">显示秒：开</div>
+		<div id="switchImage" class="settint-columns-item" onclick="switchImage();">图片：1</div>
+		<div class="settint-columns-item" onclick="displayTodo();">待办...</div>
+		<div class="settint-columns-item" onclick="window.open('http://xtzero.me');">xtzero.me</div>
+	</div>
+	<div class="todo" id="todo">
+		<div class="closeTodo" onclick="hideTodo();">×</div>
+		<div class="clearTodo" onclick="clearTodo();">×!</div>
+		<div class="addTodoBtn" onclick="displayAddTodo();">+</div>
+		<div class="addTodo" id="addTodo">
+			<div class="closeAddTodo" onclick="hideAddTodo();">×</div>
+			<input type="date" name="addTodoDate" id="addTodoDate" value="" />
+			<input type="time" name="addTodoTime" id="addTodoTime" value="" />
+			<input type="text" name="addTodoText" id="addTodoText" value="" placeholder="在这输入待办"/>
+			<div class="addTodoCfmBtn" onclick="clickAddTodo();">添加</div>
+		</div>
+		<div class="" onclick="debugShowCookie();">————未完成————</div>
+		<div id="unFinished">
+			
+		</div>
+		<br/>
+		<div class="">————已完成————</div>
+		<div id="finished">
+			
+		</div>
+	</div>
+	<script type="text/javascript">
+		var cookie = {
+		    set:function(key,val,time){
+		        var date=new Date();
+		        var expiresDays=time;
+		        date.setTime(date.getTime()+expiresDays*24*3600*1000);
+		        document.cookie=key + "=" + val +";expires="+date.toGMTString();
+		    },
+		    get:function(name){
+				var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+				if(arr=document.cookie.match(reg)){
+					var value = unescape(arr[2]);
+					if(value == 'true'){
+						return true;
+					}else if(value == 'false'){
+						return false;
+					}else{
+						return unescape(arr[2]);
+					}
+				}else{
+					return null;
+				}
+			},
+		    delete:function(key){ //删除cookie方法
+		        var date = new Date(); //获取当前时间
+		        date.setTime(date.getTime()-10000); //将date设置为过去的时间
+		        document.cookie = key + "=v; expires =" +date.toGMTString();//设置cookie
+		        return tips;
+		    }
+		}
+		
+		function debugShowCookie(){
+			prompt('',cookie.get('xt_clock_todos'));
+		}
+		//显示待办div
+		function displayTodo(){
+			document.getElementById("todo").style.display = 'flex';
+			todoToDom();
+			hideAddTodo();
+		}
+		
+		//隐藏待办div
+		function hideTodo(){
+			document.getElementById("todo").style.display = 'none';
+			document.getElementById("addTodo").style.display = 'none';
+		}
+		
+		//显示添加待办div
+		function displayAddTodo(){
+			initDatetimeInput();
+			document.getElementById("addTodo").style.display = 'flex';
+		}
+		
+		//隐藏添加待办div
+		function hideAddTodo(){
+			document.getElementById("addTodo").style.display = 'none';
+		}
+		
+		//初始化添加待办时间日期输入框
+		function initDatetimeInput(){
+			var d = new Date();
+			var year = d.getFullYear();
+			var month = addZero(d.getMonth() + 1);
+			var day = d.getDate();
+			
+			var hour = addZero(d.getHours());
+			var minute = addZero(d.getMinutes());
+			var second = addZero(d.getSeconds());
+			
+			document.getElementById("addTodoDate").value = year + '-' + month + '-' + day;
+			
+			document.getElementById("addTodoTime").value = hour + ':' + minute + ':' + second;
+		}
+		initDatetimeInput();
+		
+		//获取待办
+		function getTodo(){
+			var todoArr = JSON.parse((function(){
+				if(cookie.get('xt_clock_todos')){
+					return cookie.get('xt_clock_todos');
+				}else{
+					return '{}';
+				}
+			})());
+			if(todoArr){
+				var arr = [];
+				for(var i in todoArr){
+					arr.push(todoArr[i])
+				}
+				return arr;
+			}else{
+				return [];
+			}
+		}
+		
+		//获取待办后放在屏幕上
+		function todoToDom(){
+			document.getElementById("finished").innerHTML = '';
+			document.getElementById("unFinished").innerHTML = '';
+			var todos = getTodo();
+			for(var i in todos){
+				if(todos[i].finish == 'true' || todos[i].finish == true){
+					document.getElementById("finished").innerHTML += '<div class="todo-item-finished">'+ todos[i].text +'('+ todos[i].date +' '+ todos[i].time +')</div>'
+				}else{
+					document.getElementById("unFinished").innerHTML += '<div class="todo-item" onclick="finishTodo('+ i +')">'+ todos[i].text +'('+ todos[i].date +' '+ todos[i].time +')</div>'
+				}
+			}
+		}
+		
+		//添加待办
+		function addTodo(newTodo){
+			console.log(newTodo);
+			var todos = getTodo();
+			console.log(todos);
+			if(countObj(todos) != 0){
+				todos.push(newTodo);
+			}else{
+				todos[0] = newTodo;
+			}
+			
+			cookie.set('xt_clock_todos',JSON.stringify(todos));
+		}
+		
+		//点击按钮添加待办
+		function clickAddTodo(){
+			var addObj = {
+				time: document.getElementById("addTodoTime").value,
+				date: document.getElementById("addTodoDate").value,
+				text: document.getElementById("addTodoText").value,
+				finish: false
+			}
+			
+			addTodo(addObj);
+			todoToDom();
+		}
+		
+		//删除待办
+		function delTodo(index){
+			var todos = getTodo();
+			todos.splice(index,1);
+			cookie.set('xt_clock_todos',JSON.stringify(todos));
+		}
+		
+		//待办变成已完成
+		function finishTodo(index){
+			var todos = getTodo();
+			todos[index].finish = true;
+			cookie.set('xt_clock_todos',JSON.stringify(todos));
+			todoToDom();
+		}
+		
+		//清空待办
+		function clearTodo(){
+			if(confirm('真的要清空待办数据吗？')){
+				cookie.set('xt_clock_todos','');
+				todoToDom();
+			}
+		}
+		
+		//获取最近的一个待办
+		function getRecentlyTodo(){
+			var todos = getTodo();
+			var now = Math.round(((new Date()).valueOf())/1000);
+			var minTime = 1000000000;
+			var minIndex;
+			for(var i in todos){
+				var timestamp = Math.round(((new Date(todos[i].date + ' ' + todos[i].time)).valueOf())/1000);
+				if(timestamp - now < minTime){
+					minTime = timestamp;
+					minIndex = i;
+				}
+			}
+			
+			return todos[minIndex];
+		}
+		
+		//最近待办放在屏幕上
+		function recentlyTodoToDom(){
+			//<div class="recentlyTodo" id="recentlyTodo">最近待办：<span class="viewMoreTodo" onclick="displayTodo();">查看全部3个</span> </div>
+			var recent = getRecentlyTodo();
+			if(!recent){
+				document.getElementById("recentlyTodo").innerHTML = '没有最近待办，<span class="viewMoreTodo" onclick="displayTodo();">请添加待办。</span>';
+				return;
+			}
+			document.getElementById("recentlyTodo").innerHTML = '<div class="recentlyTodo" id="recentlyTodo">最近待办：'+ recent.text +'('+ ((function(e){
+			var now = Math.round(((new Date()).valueOf())/1000);
+			var timestamp = Math.round(((new Date(e.date + ' ' + e.time)).valueOf())/1000);	
+			var toNow = timestamp - now;
+			var toNowStr;
+			if((Math.abs(toNow)) < 60){
+				toNowStr = Math.abs(toNow) + '秒';
+			}else if((Math.abs(toNow)) >= 60 && (Math.abs(toNow)) < 3600){
+				toNowStr = ((Math.abs(toNow))/60).toFixed(2) + '分';
+			}else if((Math.abs(toNow)) > 3600){
+				toNowStr = ((Math.abs(toNow))/86400).toFixed(2) + '天'
+			}
+			
+			if(toNow >= 0){
+				return toNowStr + '后结束';
+			}else{
+				return '已超时' + toNowStr;
+			}
+		})(recent)) +')，<span class="viewMoreTodo" onclick="displayTodo();">查看全部'+ ((function(){
+			var todos = getTodo();
+			return todos.length;
+		})()) +'个</span> </div>'
+		}
+		
+		//初始化配置
+		var ifOpened = cookie.get('xt_clock_setting_opened');
+		if(ifOpened == 'false' || !ifOpened){
+			console.log('init cookie');
+			cookie.set('xt_clock_setting_displaySecond',true);
+			cookie.set('xt_clock_setting_currentImage',1);
+			cookie.set('xt_clock_setting_opened',true);
+		}
+		
+		//切换是否显示秒
+		var displaySecond = cookie.get('xt_clock_setting_displaySecond');
+		document.getElementById("displaySecond").innerHTML = (function(){
+			if(displaySecond){
+				return '显示秒：开';
+			}else{
+				return '显示秒：关';
+			}
+		})()
+		
+		function displaySecondSwitch(){
+			displaySecond = !displaySecond;
+			cookie.set('xt_clock_setting_displaySecond',displaySecond);
+			document.getElementById("displaySecond").innerHTML = (function(){
+				if(displaySecond){
+					return '显示秒：开';
+				}else{
+					return '显示秒：关';
+				}
+			})()
+		}
+		
+		//切换图片
+		var currentImage = cookie.get('xt_clock_setting_currentImage') - 0;
+		document.getElementById("bgimage").style.backgroundImage = 'url(images/'+ currentImage +'.jpeg)';
+		document.getElementById("switchImage").innerHTML = '图片：' + currentImage;
+		var imageRange = [1,5];
+		function switchImage(){
+			var nextImage = currentImage + 1;
+			if(nextImage > imageRange[1]){
+				nextImage = imageRange[0];
+			}
+			
+			currentImage = nextImage;
+			cookie.set('xt_clock_setting_currentImage',nextImage);
+			document.getElementById("bgimage").style.backgroundImage = 'url(images/'+ nextImage +'.jpeg)';
+			document.getElementById("switchImage").innerHTML = '图片：' + nextImage;
+		}
+		
+		//收起菜单
+		function hideMenu(){
+			document.getElementById("menuCircle").style.display = 'inline';
+			document.getElementById("menu").style.display = 'none';
+		}
+		
+		//打开菜单
+		function showMenu(){
+			document.getElementById("menuCircle").style.display = 'none';
+			document.getElementById("menu").style.display = 'flex';
+		}
+		
+		window.onload = function(){
+			reloadTime();
+			reloadFontSize();
+			recentlyTodoToDom();
+			
+			window.addEventListener("scroll",function(e){
+				window.scrollTo({
+					top: 0
+				});
+			})
+		}
+		
+		window.onresize = function(){
+			reloadFontSize();
+		}
+		
+		setInterval(function(){
+			reloadTime();
+			recentlyTodoToDom();
+		},1000)
+		
+		function addZero(v){
+			if(v < 10){
+				return '0' + v;
+			}else{
+				return v;
+			}
+		}
+		
+		
+		function countObj(obj) {
+			var t = typeof obj;
+			if (t == 'string') {
+				return obj.length;
+			} else if (t == 'object') {
+				var n = 0;
+				for (var i in obj) {
+					n++;
+				}
+				return n;
+			}
+			return false;
+		}
+		
+		function reloadTime(){
+			var d = new Date();
+			var year = d.getFullYear();
+			var month = addZero(d.getMonth() + 1);
+			var day = d.getDate();
+			
+			var hour = addZero(d.getHours());
+			var minute = addZero(d.getMinutes());
+			var second = addZero(d.getSeconds());
+			
+			document.getElementById("date").innerHTML = year + '-' + month + '-' + day;
+			
+			if(displaySecond){
+				document.getElementById("time").innerHTML = hour + ':' + minute + ':' + second;
+			}else{
+				document.getElementById("time").innerHTML = hour + ':' + minute;
+			}
+		}
+		
+		function reloadFontSize(){
+			document.getElementById("cover").style.fontSize = (window.screen.width / 10) + 'px';
+		}
+	</script>
+</body>
+</html>
